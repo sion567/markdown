@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notebook - 笔记工具栏</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="notebook.css" />
+</head>
+<body>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/marked"></script>
+    <!-- 笔记本应用 -->
+    <div id="notebook">
+        <!-- 侧边栏 -->
+        <aside class="side-bar">
+            <!-- 工具栏 -->
+            <div class="toolbar">
+                <!-- 添加笔记按钮 -->
+                <button @click="addNote" :title="addButtonTitle"><i class="material-icons">add</i>Add note</button>
+            </div>
+            <div class="notes">
+                <div class="note" v-for="n of sortedNotes" 
+                @click="selectNote(n)" 
+                :class="{selected: n === selectedNote}">
+                <i class="icon material-icons" v-if="n.favorite">star</i>{{n.title}}
+            </div>
+            </div>
+        </aside>
+        <template v-if="selectedNote">
+            <!-- 主面板 -->
+            <section class="main" >
+                <div class="toolbar">
+                    <input v-model="selectedNote.title" placeholder="Note title" />
+                    <button @click="favoriteNote" title="Favorite note"><i class="material-icons">{{selectedNote.favorite ? 'star' : 'star_border'}}</i></button>
+                    <button @click="removeNote" title="Remove note"><i class="material-icons">delete</i></button>
+                </div>
+                <textarea v-model="selectedNote.content"></textarea>    
+            </section>
+            <aside class="preview" v-html="notePreview"></aside> 
+        </template>
+    </div>
+    <script src="notebook.js"></script>
+</body>
+</html>
